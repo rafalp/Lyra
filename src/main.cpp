@@ -1,5 +1,6 @@
 #include <stdio.h>
-#include <SDL.h>
+#include <SDL2/SDL.h>
+#include "gamemodespace.h"
 #include "settings.h"
 #include "window.h"
 
@@ -25,7 +26,9 @@ int main(int argc, char* args[]) {
     if (!window->create(settings)) {
         return quit();
     }
-    
+
+    LyrGameModeSpace* gamemode = new LyrGameModeSpace();
+
     bool runloop = true;
     while (runloop) {
         while (SDL_PollEvent(&e) != 0) {
@@ -36,6 +39,13 @@ int main(int argc, char* args[]) {
                 runloop = false;
             }
         }
+
+        window->clear();
+        gamemode->onTick();
+        gamemode->render();
+        window->swap();
+
+        SDL_Delay(16);
     }
 
     SDL_Quit();

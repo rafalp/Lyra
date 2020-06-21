@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include <nlohmann/json.hpp>
 #include "settings.h"
 
