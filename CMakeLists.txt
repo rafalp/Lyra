@@ -7,6 +7,7 @@ find_package(OpenGL REQUIRED)
 find_package(GLUT REQUIRED)
 
 include_directories(${SDL2_INCLUDE_DIRS})
+include_directories(./include)
 
 # Add source files
 file(GLOB_RECURSE SOURCE_FILES ${CMAKE_SOURCE_DIR}/src/*.cpp)
