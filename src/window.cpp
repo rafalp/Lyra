@@ -1,3 +1,4 @@
+#define GL_SILENCE_DEPRECATION
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_video.h>
 #include <OpenGL/gl.h>

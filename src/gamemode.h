@@ -9,6 +9,6 @@ public:
 
     void create(){};
     void destroy(){};
-    void tick(){};
+    bool tick(){ return false; };
     void render(){};
 };

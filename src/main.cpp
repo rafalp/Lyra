@@ -13,8 +13,6 @@ int quit()
 
 int main(int argc, char *args[])
 {
-    SDL_Event e;
-
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0)
     {
         SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
@@ -34,28 +32,25 @@ int main(int argc, char *args[])
     }
 
     LyrGameModeSpace *gamemode = new LyrGameModeSpace();
+    gamemode->create();
 
     bool runloop = true;
     while (runloop)
     {
-        while (SDL_PollEvent(&e) != 0)
-        {
-            if (e.type == SDL_QUIT)
-            {
-                runloop = false;
-            }
-            if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE)
-            {
-                runloop = false;
-            }
-        }
-
         window->clear();
-        gamemode->tick();
-        gamemode->render();
-        window->swap();
+        if (gamemode->tick())
+        {
+            gamemode->tick();
+            gamemode->render();
+            window->swap();
 
-        SDL_Delay(16);
+            SDL_Delay(16);
+        }
+        else
+        {
+            gamemode->destroy();
+            runloop = false;
+        }
     }
 
     SDL_Quit();
