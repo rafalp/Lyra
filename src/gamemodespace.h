@@ -1,10 +1,12 @@
 #pragma once
+#include "entities.h"
 #include "gamemode.h"
 
-class LyrGameModeSpace: public LyrGameMode {
-    public:
-        float m_rotation = 1.0;
+class LyrGameModeSpace : public LyrGameMode
+{
+public:
+    LyrEntities *m_entities;
 
-        void onTick();
-        void render();
+    void create();
+    void render();
 };

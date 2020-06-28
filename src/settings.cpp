@@ -8,9 +8,11 @@
 using namespace std;
 using json = nlohmann::json;
 
-bool LyrSettings::init() {
+bool LyrSettings::init()
+{
     SDL_DisplayMode dm;
-    if (SDL_GetDesktopDisplayMode(0, &dm) != 0) {
+    if (SDL_GetDesktopDisplayMode(0, &dm) != 0)
+    {
         SDL_Log("SDL_GetDesktopDisplayMode failed: %s", SDL_GetError());
         return false;
     }
@@ -19,46 +21,55 @@ bool LyrSettings::init() {
     m_screenWidth = dm.w;
     m_screenHeight = dm.h;
 
-    if (!load() && !save()) {
+    if (!load() && !save())
+    {
         return false;
     }
 
     return true;
 }
 
-bool LyrSettings::load() {
+bool LyrSettings::load()
+{
     ifstream fp;
     stringstream buffer;
 
     fp.open("settings.json", ios::in);
-    if (!fp.is_open()) {
+    if (!fp.is_open())
+    {
         return false;
     }
 
     buffer << fp.rdbuf();
     fp.close();
 
-    try {
+    try
+    {
         json j = json::parse(buffer);
-        if (!j.is_object()) {
+        if (!j.is_object())
+        {
             return false;
         }
 
         m_fullscreen = j.value("fullscreen", true);
         m_screenWidth = j.value("screenWidth", m_screenWidth);
         m_screenHeight = j.value("screenHeight", m_screenHeight);
-    } catch (json::parse_error e) {
+    }
+    catch (json::parse_error e)
+    {
         return false;
     }
 
-    if (m_screenWidth < 320 || m_screenHeight < 240) {
+    if (m_screenWidth < 320 || m_screenHeight < 240)
+    {
         return false;
     }
 
     return true;
 }
 
-bool LyrSettings::save() {
+bool LyrSettings::save()
+{
     json j;
     ofstream fp;
 
@@ -67,7 +78,8 @@ bool LyrSettings::save() {
     j["screenHeight"] = m_screenHeight;
 
     fp.open("settings.json", ios::out | ios::trunc);
-    if (fp.is_open()) {
+    if (fp.is_open())
+    {
         fp << j.dump();
         fp.close();
         return true;

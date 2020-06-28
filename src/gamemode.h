@@ -1,12 +1,14 @@
 #pragma once
-#include <vector>
-#include "entity.h"
+#include "entities.h"
+#include "window.h"
 
-class LyrGameMode {
-    public:
-        std::vector<LyrEntity*> m_entities;
+class LyrGameMode
+{
+public:
+    LyrEntities *m_entities;
 
-        void onTick() {};
-        void render() {};
-        void destroy() {};
+    void create(){};
+    void destroy(){};
+    void tick(){};
+    void render(){};
 };

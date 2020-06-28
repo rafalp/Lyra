@@ -2,18 +2,17 @@
 #include <OpenGL/glu.h>
 #include "gamemodespace.h"
 
-void LyrGameModeSpace::onTick() {
-    m_rotation += 1.0;
-    if (m_rotation > 360.0) {
-        m_rotation -= 360.0;
-    }
+void LyrGameModeSpace::create()
+{
+    m_entities = new LyrEntities();
 }
 
-void LyrGameModeSpace::render() {
+void LyrGameModeSpace::render()
+{
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     glRotatef(300.0, 1.0, 0.0, 0.0);
-    glRotatef(m_rotation, 0.0, 0.0, 1.0);
+    glRotatef(0.0, 0.0, 0.0, 1.0);
 
     glBegin(GL_TRIANGLES);
 
