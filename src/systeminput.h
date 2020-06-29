@@ -15,6 +15,8 @@ public:
     key_state* k_left;
     key_state* k_up;
     key_state* k_down;
+    key_state* k_w;
+    key_state* k_s;
 
     LyrSystemInput();
     ~LyrSystemInput();

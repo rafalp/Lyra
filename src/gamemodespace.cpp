@@ -5,6 +5,37 @@
 #include "gamemodespace.h"
 #include "systeminput.h"
 
+const float obj[] = {
+    0.0f, 0.562335f, -1.89494f,
+    -0.866025f, -0.5f, -2.5f,
+    0.866025f, -0.5f, -2.5f,
+    0.0f, -0.0f, 2.5f,
+    -0.866025f, -0.5f, -2.5f,
+    0.866025f, -0.5f, -2.5f,
+    0.0f, 0.0f, 2.5f,
+    0.0f, 0.562335f, -1.89494f,
+    0.866025f, -0.5f, -2.5f,
+    0.0f, 0.0f, 2.5f,
+    0.0f, 0.562335f, -1.89494f,
+    -0.866025f, -0.5f, -2.5f
+};
+
+const float colors[] = {
+    1.0f, 1.0f, 0.0f,
+    0.7f, 0.7f, 0.0f,
+    0.4f, 0.4f, 0.0f,
+    0.0f, 0.0f, 1.0f,
+    0.0f, 0.0f, 0.7f,
+    0.0f, 0.0f, 0.4f,
+    1.0f, 0.0f, 0.0f,
+    0.7f, 0.0f, 0.0f,
+    0.4f, 0.0f, 0.0f,
+    0.0f, 1.0f, 0.0f,
+    0.0f, 0.7f, 0.0f,
+    0.0f, 0.4f, 0.0f,
+};
+
+
 void LyrGameModeSpace::create()
 {
     m_entities = new LyrEntities();
@@ -27,32 +58,45 @@ bool LyrGameModeSpace::tick()
 
     if (m_input->k_right->press)
     {
-        m_rotx -= 1.3;
+        m_rot_x -= 1.3;
     }
     if (m_input->k_left->press)
     {
-        m_rotx += 1.3;
+        m_rot_x += 1.3;
     }
     if (m_input->k_up->press)
     {
-        m_roty += 0.8;
+        m_rot_y += 0.8;
     }
     if (m_input->k_down->press)
     {
-        m_roty -= 0.8;
+        m_rot_y -= 0.8;
     }
 
-    if (m_rotx > 360) {
-        m_rotx -= 360;
+    if (m_rot_x > 360)
+    {
+        m_rot_x -= 360;
     }
-    if (m_rotx < 0) {
-        m_rotx += 360;
+    if (m_rot_x < 0)
+    {
+        m_rot_x += 360;
     }
-    if (m_roty > 360) {
-        m_roty -= 360;
+    if (m_rot_y > 360)
+    {
+        m_rot_y -= 360;
     }
-    if (m_roty < 0) {
-        m_roty += 360;
+    if (m_rot_y < 0)
+    {
+        m_rot_y += 360;
+    }
+
+    if (m_input->k_w->press)
+    {
+        m_pos_z += 0.01;
+    }
+    if (m_input->k_s->press)
+    {
+        m_pos_z -= 0.01;
     }
 
     return true;
@@ -63,39 +107,14 @@ void LyrGameModeSpace::render()
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    glRotatef(180, 0.0, 1.0, 0.0);
-    glRotatef(m_rotx, 0.0, -.0, 1.0);
-    glRotatef(m_roty, 1.0, 0.0, 0.0);
 
     glBegin(GL_TRIANGLES);
 
-    glColor3f(1.0f, 1.0f, 0.0f);
-    glVertex3f(0.0f, 0.562335f, -1.89494f);
-    glColor3f(0.7f, 0.7f, 0.0f);
-    glVertex3f(-0.866025f, -0.5f, -2.5f);
-    glColor3f(0.4f, 0.4f, 0.0f);
-    glVertex3f(0.866025f, -0.5f, -2.5f);
-
-    glColor3f(0.0f, 0.0f, 1.0f);
-    glVertex3f(0.0f, -0.0f, 2.5f);
-    glColor3f(0.0f, 0.0f, 0.7f);
-    glVertex3f(-0.866025f, -0.5f, -2.5f);
-    glColor3f(0.0f, 0.0f, 0.4f);
-    glVertex3f(0.866025f, -0.5f, -2.5f);
-
-    glColor3f(1.0f, 0.0f, 0.0f);
-    glVertex3f(0.0f, 0.0f, 2.5f);
-    glColor3f(0.7f, 0.0f, 0.0f);
-    glVertex3f(0.0f, 0.562335f, -1.89494f);
-    glColor3f(0.4f, 0.0f, 0.0f);
-    glVertex3f(0.866025f, -0.5f, -2.5f);
-
-    glColor3f(0.0f, 1.0f, 0.0f);
-    glVertex3f(0.0f, 0.0f, 2.5f);
-    glColor3f(0.0f, 0.7f, 0.0f);
-    glVertex3f(0.0f, 0.562335f, -1.89494f);
-    glColor3f(0.0f, 0.4f, 0.0f);
-    glVertex3f(-0.866025f, -0.5f, -2.5f);
-
+    int vertexes = sizeof(obj) / sizeof(obj[0]) / 3;
+    for (int v = 0; v < vertexes; v ++) {
+        int i = v * 3;
+        glColor3f(colors[i], colors[i + 1], colors[i + 2]);
+        glVertex3f(obj[i], obj[i + 1], obj[i + 2]);
+    }
     glEnd();
 }

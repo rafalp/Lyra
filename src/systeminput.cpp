@@ -8,14 +8,16 @@ LyrSystemInput::LyrSystemInput()
     k_left = new key_state;
     k_up = new key_state;
     k_down = new key_state;
+    k_w = new key_state;
+    k_s = new key_state;
 }
 
 LyrSystemInput::~LyrSystemInput()
 {
     delete k_right;
     delete k_left;
-    delete k_up;
-    delete k_down;
+    delete k_w;
+    delete k_s;
 }
 
 void LyrSystemInput::tick()
@@ -31,6 +33,10 @@ void LyrSystemInput::tick()
     k_up->up = false;
     k_down->down = false;
     k_down->up = false;
+    k_w->down = false;
+    k_w->up = false;
+    k_s->down = false;
+    k_s->up = false;
 
     while (SDL_PollEvent(&e) != 0)
     {
@@ -64,6 +70,16 @@ void LyrSystemInput::tick()
                 k_down->down = true;
                 k_down->press = true;
             }
+            if (e.key.keysym.sym == SDLK_w)
+            {
+                k_w->down = true;
+                k_w->press = true;
+            }
+            if (e.key.keysym.sym == SDLK_s)
+            {
+                k_s->down = true;
+                k_s->press = true;
+            }
         }
         if (e.type == SDL_KEYUP)
         {
@@ -86,6 +102,16 @@ void LyrSystemInput::tick()
             {
                 k_down->up = true;
                 k_down->press = false;
+            }
+            if (e.key.keysym.sym == SDLK_w)
+            {
+                k_w->up = true;
+                k_w->press = false;
+            }
+            if (e.key.keysym.sym == SDLK_s)
+            {
+                k_s->up = true;
+                k_s->press = false;
             }
         }
     }

@@ -1,4 +1,6 @@
 #pragma once
+#define GL_SILENCE_DEPRECATION
+#include <OpenGL/gl.h>
 #include "entities.h"
 #include "gamemode.h"
 #include "systeminput.h"
@@ -14,6 +16,9 @@ public:
     void render();
 
 private:
-    float m_rotx = 0.0;
-    float m_roty = 0.0;
+    float m_rot_x = 0.0;
+    float m_rot_y = 0.0;
+    GLfloat m_pos_x = 0.0f;
+    GLfloat m_pos_y = 0.0f;
+    GLfloat m_pos_z = 0.0f;
 };
