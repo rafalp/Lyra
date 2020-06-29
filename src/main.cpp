@@ -1,3 +1,4 @@
+#define TINYOBJLOADER_IMPLEMENTATION
 #include <stdio.h>
 #include <SDL2/SDL.h>
 #include "gamemode.h"

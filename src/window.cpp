@@ -35,8 +35,8 @@ bool LyrWindow::create(LyrSettings *settings)
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    //glOrtho(-2.0, 2.0, -2.0, 2.0, -20.0, 20.0);
-    gluPerspective(60.0, settings->m_screenWidth / settings->m_screenHeight, 0.1, 100.0);
+    glOrtho(-2.0, 2.0, -2.0, 2.0, -20.0, 20.0);
+    //gluPerspective(60.0, settings->m_screenWidth / settings->m_screenHeight, 0.1, 100.0);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     glEnable(GL_DEPTH_TEST);

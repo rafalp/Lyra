@@ -2,44 +2,19 @@
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
 #include <SDL2/SDL.h>
+#include <tinyobjloader/tiny_obj_loader.h>
 #include "gamemodespace.h"
 #include "systeminput.h"
-
-const float obj[] = {
-    0.0f, 0.562335f, -1.89494f,
-    -0.866025f, -0.5f, -2.5f,
-    0.866025f, -0.5f, -2.5f,
-    0.0f, -0.0f, 2.5f,
-    -0.866025f, -0.5f, -2.5f,
-    0.866025f, -0.5f, -2.5f,
-    0.0f, 0.0f, 2.5f,
-    0.0f, 0.562335f, -1.89494f,
-    0.866025f, -0.5f, -2.5f,
-    0.0f, 0.0f, 2.5f,
-    0.0f, 0.562335f, -1.89494f,
-    -0.866025f, -0.5f, -2.5f
-};
-
-const float colors[] = {
-    1.0f, 1.0f, 0.0f,
-    0.7f, 0.7f, 0.0f,
-    0.4f, 0.4f, 0.0f,
-    0.0f, 0.0f, 1.0f,
-    0.0f, 0.0f, 0.7f,
-    0.0f, 0.0f, 0.4f,
-    1.0f, 0.0f, 0.0f,
-    0.7f, 0.0f, 0.0f,
-    0.4f, 0.0f, 0.0f,
-    0.0f, 1.0f, 0.0f,
-    0.0f, 0.7f, 0.0f,
-    0.0f, 0.4f, 0.0f,
-};
-
 
 void LyrGameModeSpace::create()
 {
     m_entities = new LyrEntities();
     m_input = new LyrSystemInput();
+
+    std::string warn;
+    std::string err;
+
+    bool ret = tinyobj::LoadObj(&m_attrib, &m_shapes, &m_materials, &warn, &err, "data/harrier.obj");
 }
 
 void LyrGameModeSpace::destroy()
@@ -52,52 +27,29 @@ bool LyrGameModeSpace::tick()
 {
     m_input->tick();
     if (m_input->e_quit)
-    {
         return false;
-    }
-
-    if (m_input->k_right->press)
-    {
+    if (m_input->k_right.press)
         m_rot_x -= 1.3;
-    }
-    if (m_input->k_left->press)
-    {
+    if (m_input->k_left.press)
         m_rot_x += 1.3;
-    }
-    if (m_input->k_up->press)
-    {
+    if (m_input->k_up.press)
         m_rot_y += 0.8;
-    }
-    if (m_input->k_down->press)
-    {
+    if (m_input->k_down.press)
         m_rot_y -= 0.8;
-    }
 
     if (m_rot_x > 360)
-    {
         m_rot_x -= 360;
-    }
     if (m_rot_x < 0)
-    {
         m_rot_x += 360;
-    }
     if (m_rot_y > 360)
-    {
         m_rot_y -= 360;
-    }
     if (m_rot_y < 0)
-    {
         m_rot_y += 360;
-    }
 
-    if (m_input->k_w->press)
-    {
-        m_pos_z += 0.01;
-    }
-    if (m_input->k_s->press)
-    {
-        m_pos_z -= 0.01;
-    }
+    if (m_input->k_w.press)
+        m_scale += 0.01;
+    if (m_input->k_s.press)
+        m_scale -= 0.01;
 
     return true;
 }
@@ -107,14 +59,25 @@ void LyrGameModeSpace::render()
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
+    glRotatef(m_rot_x, 0.0, 1.0, 0.0);
+    glRotatef(m_rot_y, 1.0, 0.0, 0.0);
 
     glBegin(GL_TRIANGLES);
+    glColor3f(1.0f, 1.6f, 1.0f);
+    for (size_t s = 0; s < m_shapes.size(); s++) {
+        size_t index_offset = 0;
+        for (size_t f = 0; f < m_shapes[s].mesh.num_face_vertices.size(); f++) {
+            int fv = m_shapes[s].mesh.num_face_vertices[f];
+            for (size_t v = 0; v < fv; v++) {
+                tinyobj::index_t idx = m_shapes[s].mesh.indices[index_offset + v];
+                tinyobj::real_t vx = m_attrib.vertices[3*idx.vertex_index+0];
+                tinyobj::real_t vy = m_attrib.vertices[3*idx.vertex_index+1];
+                tinyobj::real_t vz = m_attrib.vertices[3*idx.vertex_index+2];
 
-    int vertexes = sizeof(obj) / sizeof(obj[0]) / 3;
-    for (int v = 0; v < vertexes; v ++) {
-        int i = v * 3;
-        glColor3f(colors[i], colors[i + 1], colors[i + 2]);
-        glVertex3f(obj[i], obj[i + 1], obj[i + 2]);
+                glVertex3f(vx, vy, vz);
+            }
+            index_offset += fv;
+        }
     }
     glEnd();
 }
